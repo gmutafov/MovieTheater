@@ -11,22 +11,21 @@ class MovieListView(ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        queryset = (
-            Movie.objects
-            .select_related("producer")
-            .prefetch_related("actors")
-        )
-
+        queryset = Movie.objects.select_related("producer").prefetch_related("actors")
         q = self.request.GET.get("q")
         genre = self.request.GET.get("genre")
 
         if q:
             queryset = queryset.filter(title__icontains=q)
-
         if genre:
             queryset = queryset.filter(genre=genre)
-
         return queryset
+
+    # 👇 WE NEED THIS TO GENERATE THE DROP-DOWN OPTIONS:
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['genre_choices'] = Movie.Genre.choices
+        return context
 
 class MovieDetailView(DetailView):
     model = Movie

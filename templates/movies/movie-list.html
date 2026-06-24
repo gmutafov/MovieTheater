@@ -1,26 +1,18 @@
-{% extends "base.html" %}
+{% extends "common/base.html" %}
 {% block title %}Movies{% endblock %}
 
 {% block content %}
-
-<!-- Filters -->
+<p>HELLO DOES THIS SHOW UP ON THE WEBSITE?</p>
 <form method="get" class="row mb-4">
   <div class="col-md-6">
-    <input
-      type="text"
-      name="q"
-      value="{{ request.GET.q }}"
-      class="form-control"
-      placeholder="Search movies..."
-    >
+    <input type="text" name="q" value="{{ request.GET.q }}" class="form-control" placeholder="Search movies...">
   </div>
 
   <div class="col-md-4">
     <select name="genre" class="form-select">
       <option value="">All genres</option>
-      {% for value, label in movies.model.Genre.choices %}
-        <option value="{{ value }}"
-          {% if request.GET.genre == value %}selected{% endif %}>
+      {% for value, label in genre_choices %}
+        <option value="{{ value }}" {% if request.GET.genre == value %}selected{% endif %}>
           {{ label }}
         </option>
       {% endfor %}
@@ -34,7 +26,6 @@
 
 <h1 class="mb-4">Now Showing</h1>
 
-<!-- Movie cards -->
 <div class="row">
   {% for movie in movies %}
     <div class="col-md-4 mb-4">
@@ -45,8 +36,7 @@
             <strong>Producer:</strong> {{ movie.producer.name }}<br>
             <strong>Genre:</strong> {{ movie.genre }}
           </p>
-          <a href="{% url 'movie-detail' movie.pk %}"
-             class="btn btn-primary btn-sm">
+          <a href="{% url 'movie-detail' movie.pk %}" class="btn btn-primary btn-sm">
              View Details
           </a>
         </div>
@@ -55,15 +45,11 @@
   {% endfor %}
 </div>
 
-<!-- ✅ Pagination pushed to bottom of page -->
-<nav class="mt-auto">
+<nav class="my-4">
   <ul class="pagination justify-content-center">
     {% if page_obj.has_previous %}
       <li class="page-item">
-        <a class="page-link"
-           href="?page={{ page_obj.previous_page_number }}">
-           Previous
-        </a>
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
       </li>
     {% endif %}
 
@@ -73,13 +59,9 @@
 
     {% if page_obj.has_next %}
       <li class="page-item">
-        <a class="page-link"
-           href="?page={{ page_obj.next_page_number }}">
-           Next
-        </a>
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
       </li>
     {% endif %}
   </ul>
 </nav>
-
 {% endblock %}
