@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}{{ producer.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ producer.name }}</h1>
+
+<p><strong>Company:</strong> {{ producer.company }}</p>
+<p><strong>Country:</strong> {{ producer.country }}</p>
+<p><strong>Movies produced:</strong> {{ producer.movie_count }}</p>
+
+<h4 class="mt-4">Movies</h4>
+<ul class="list-group">
+    {% for movie in producer.movies.all %}
+        <li class="list-group-item">
+            <a href="{% url 'movie-detail' movie.pk %}">
+                {{ movie.title }}
+            </a>
+        </li>
+    {% empty %}
+        <li class="list-group-item">No movies found</li>
+    {% endfor %}
+</ul>
+{% endblock %}
