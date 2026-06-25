@@ -14,24 +14,21 @@ from accounts.models import AppUser
 class RegisterView(CreateView):
     form_class = CustomUserCreationForm
     template_name = 'accounts/register.html'
-    # success_url = reverse_lazy('success')
 
-    # def form_valid(self, form):
-    #     try:
-    #         user = form.save()
-    #         login(self.request, user)
-    #         return redirect(self.success_url)
-    #     # except Exception as e:
-    #     #     return redirect('failure')
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('movie-list')
 
 class UserLoginView(LoginView):
     template_name = 'accounts/login.html'
-    context_object_name = 'login'
 
     def form_invalid(self, form):
+        storage = messages.get_messages(self.request)
+        storage.used = True
+
         messages.error(self.request, "The username or password is incorrect.")
         return super().form_invalid(form)
-
 
 class ProfileEditView(LoginRequiredMixin, UpdateView):
     model = AppUser

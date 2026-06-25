@@ -4,42 +4,20 @@ from accounts.models import AppUser
 
 
 class CustomUserCreationForm(UserCreationForm):
-    class Meta:
+    class Meta(UserCreationForm.Meta):
         model = AppUser
-        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2',]
+        fields = UserCreationForm.Meta.fields + ('first_name', 'last_name', 'email')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['username'].widget.attrs.update({
-            'placeholder': 'Enter your username',
-            'class': 'form-control'
-        })
-        self.fields['first_name'].widget.attrs.update({
-            'placeholder': 'Enter your first name',
-            'class': 'form-control'
-        })
-        self.fields['last_name'].widget.attrs.update({
-            'placeholder': 'Enter your last name',
-            'class': 'form-control'
-        })
-        self.fields['email'].widget.attrs.update({
-            'placeholder': 'Enter your email address',
-            'class': 'form-control'
-        })
-        self.fields['password1'].widget.attrs.update({
-            'placeholder': 'Enter your password',
-            'class': 'form-control'
-        })
-        self.fields['password2'].widget.attrs.update({
-            'placeholder': 'Confirm your password',
-            'class': 'form-control'
-        })
+        for field_name in self.fields:
+            self.fields[field_name].widget.attrs.update({'class': 'form-control'})
 
-
-        self.fields['username'].help_text = None
-        self.fields['password1'].help_text = None
-        self.fields['password2'].help_text = None
+        self.fields['username'].widget.attrs.update({'placeholder': 'Enter your username'})
+        self.fields['first_name'].widget.attrs.update({'placeholder': 'Enter your first name'})
+        self.fields['last_name'].widget.attrs.update({'placeholder': 'Enter your last name'})
+        self.fields['email'].widget.attrs.update({'placeholder': 'Enter your email address'})
 
 
 
